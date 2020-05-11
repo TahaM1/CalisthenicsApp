@@ -1,3 +1,4 @@
+import 'package:fitness_app/RoutineForm.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
@@ -25,30 +26,30 @@ class HomePage extends StatelessWidget {
           tooltip: 'menu',
         ),
       ),
-      body: CreateRoutine(),
+      body: RoutineForm(),
     );
   }
 }
 
-class CreateRoutine extends StatelessWidget {
+class CreateRoutineButton extends StatelessWidget {
   @override
   Widget build(BuildContext build) {
     return GestureDetector(
-        onTap: () {
-          print('tapped!');
-        },
+      onTap: () {
+        print('tapped!');
+      },
+      child: Container(
+        height: 50.0,
+        width: 150,
+        padding: EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: Colors.lightBlue[500],
+        ),
         child: Center(
-          child: Container(
-              height: 50.0,
-              width: 150,
-              padding: EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: Colors.lightBlue[500],
-              ),
-              child: Center(
-                child: Text('Create Routine'),
-              )),
-        ));
+          child: Text('Create Routine'),
+        ),
+      ),
+    );
   }
 }
