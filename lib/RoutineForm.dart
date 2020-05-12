@@ -7,7 +7,7 @@ class RoutineForm extends StatefulWidget {
 }
 
 class RoutineFormState extends State<RoutineForm> {
-  final _formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
   //List<Widget> list = listofText().add(SubmitExercisesButton(_formKey));
   List<String> userInputs = new List<String>();
 
@@ -20,110 +20,81 @@ class RoutineFormState extends State<RoutineForm> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
     return Form(
-      key: _formKey,
+      key: formKey,
       child: ListView(
         children: <Widget>[
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
             child: TextFormField(
-              decoration: InputDecoration(labelText: 'Excerise #${1}'),
+              decoration: InputDecoration(
+                labelText: 'Routine Name',
+              ),
               validator: (value) {
                 if (value.isEmpty) {
-                  return 'Enter An Excercise Please';
+                  return 'Enter a Routine Name';
                 }
-                return null;
-              },
-              onSaved: (value) => userInputs.add(value),
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
-            child: TextFormField(
-              decoration: InputDecoration(labelText: 'Excerise #${2}'),
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'Enter An Excercise Please';
-                }
-                return null;
-              },
-              onSaved: (value) => userInputs.add(value),
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
-            child: TextFormField(
-              decoration: InputDecoration(labelText: 'Excerise #${3}'),
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'Enter An Excercise Please';
-                }
-                return null;
-              },
-              onSaved: (value) => userInputs.add(value),
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
-            child: TextFormField(
-              decoration: InputDecoration(labelText: 'Excerise #${4}'),
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'Enter An Excercise Please';
-                }
-
                 return null;
               },
               onSaved: (value) {
                 userInputs.add(value);
-
-                print(userInputs);
               },
             ),
+            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
           ),
-          SubmitExercisesButton(_formKey)
+          ExcerciseTextField(number: 1, savedList: userInputs),
+          ExcerciseTextField(number: 2, savedList: userInputs),
+          ExcerciseTextField(number: 3, savedList: userInputs),
+          ExcerciseTextField(number: 4, savedList: userInputs),
+          SubmitExercisesButton(formkey: formKey)
         ],
       ),
     );
   }
 }
 
-List<Widget> listofText() {
-  List<Widget> list = new List<Widget>();
+class ExcerciseTextField extends StatelessWidget {
+  final int number;
+  final List<String> savedList;
 
-  for (var i = 0; i < 4; i++) {
-    list.add(Container(
+  ExcerciseTextField({this.number, this.savedList}); //constructor
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
       padding: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
       child: TextFormField(
-        decoration: InputDecoration(labelText: 'Excerise #${i + 1}'),
+        decoration: InputDecoration(labelText: 'Excerise #${number}'),
         validator: (value) {
           if (value.isEmpty) {
             return 'Enter An Excercise Please';
           }
           return null;
         },
+        onSaved: (value) {
+          print(value);
+          savedList.add(value.replaceAll(' ', ''));
+          print(savedList);
+        },
       ),
-    ));
+    );
   }
-
-  return list;
 }
 
 class SubmitExercisesButton extends StatelessWidget {
-  GlobalKey<FormState> _key;
+  final GlobalKey<FormState> formkey;
 
-  SubmitExercisesButton(GlobalKey<FormState> key) {
-    this._key = key;
-  }
+  SubmitExercisesButton({this.formkey});
 
   @override
   Widget build(BuildContext context) {
     return RaisedButton(
       onPressed: () {
-        if (_key.currentState.validate()) {
+        if (formkey.currentState.validate()) {
           Scaffold.of(context)
               .showSnackBar(SnackBar(content: Text('Processing Data')));
-          _key.currentState.save();
+          formkey.currentState.save();
         }
       },
       child: Text('Submit'),
