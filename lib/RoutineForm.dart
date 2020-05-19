@@ -1,3 +1,4 @@
+import 'utils/DBProvider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -10,6 +11,13 @@ class RoutineFormState extends State<RoutineForm> {
   final formKey = GlobalKey<FormState>();
   //List<Widget> list = listofText().add(SubmitExercisesButton(_formKey));
   List<String> userInputs = new List<String>();
+
+  @override
+  void initState() {
+    DBProvider.db.creatDatabase();
+    print('Database Created!');
+    super.initState();
+  }
 
   //final textController = TextEditingController();
   @override
@@ -43,10 +51,10 @@ class RoutineFormState extends State<RoutineForm> {
             ),
             padding: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
           ),
-          ExcerciseTextField(number: 1, savedList: userInputs),
-          ExcerciseTextField(number: 2, savedList: userInputs),
-          ExcerciseTextField(number: 3, savedList: userInputs),
-          ExcerciseTextField(number: 4, savedList: userInputs),
+          ExerciseTextField(number: 1, savedList: userInputs),
+          ExerciseTextField(number: 2, savedList: userInputs),
+          ExerciseTextField(number: 3, savedList: userInputs),
+          ExerciseTextField(number: 4, savedList: userInputs),
           SubmitExercisesButton(formkey: formKey)
         ],
       ),
@@ -54,21 +62,21 @@ class RoutineFormState extends State<RoutineForm> {
   }
 }
 
-class ExcerciseTextField extends StatelessWidget {
+class ExerciseTextField extends StatelessWidget {
   final int number;
   final List<String> savedList;
 
-  ExcerciseTextField({this.number, this.savedList}); //constructor
+  ExerciseTextField({this.number, this.savedList}); //constructor
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
       child: TextFormField(
-        decoration: InputDecoration(labelText: 'Excerise #${number}'),
+        decoration: InputDecoration(labelText: 'Excerise #$number'),
         validator: (value) {
           if (value.isEmpty) {
-            return 'Enter An Excercise Please';
+            return 'Enter An Exercise Please';
           }
           return null;
         },
