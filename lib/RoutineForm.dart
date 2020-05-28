@@ -1,4 +1,4 @@
-import 'utils/DBProvider.dart';
+import 'package:fitness_app/Utils/DBProvider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -14,8 +14,10 @@ class RoutineFormState extends State<RoutineForm> {
 
   @override
   void initState() {
-    DBProvider.db.creatDatabase();
+    DBProvider.db.database;
+    DBProvider.db.extractdb();
     print('Database Created!');
+
     super.initState();
   }
 
