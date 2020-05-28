@@ -1,7 +1,7 @@
 class Exercise {
-  final String name;
-  final List<int> sets;
-  final int time;
+  final String name, type, data, time, date;
+  final double weight;
 
-  Exercise({this.name, this.sets, this.time});
+  Exercise(
+      {this.name, this.type, this.data, this.time, this.date, this.weight});
 }
