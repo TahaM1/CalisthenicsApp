@@ -22,7 +22,7 @@ class DBProvider {
     var database = await openDatabase(databasePath, version: 1,
         onCreate: (database, version) async {
       await database.execute(//creates table
-          "CREATE TABLE Routine (id INTEGER PRIMARY KEY, name TEXT)");
+          "CREATE TABLE Routine (id INTEGER PRIMARY KEY, name TEXT, type TEXT, data TEXT, time TEXT, date TEXT, weight REAL)");
       await database.transaction((txn) async {
         int id1 =
             await txn.rawInsert('INSERT INTO Routine(name) VALUES("Pushup")');
@@ -33,5 +33,13 @@ class DBProvider {
       });
     });
     return database;
+  }
+
+  extractdb() async {
+    final db = await database;
+    List<Map> row = await db.query('Routine');
+    row.forEach((element) {
+      print(element);
+    });
   }
 }
