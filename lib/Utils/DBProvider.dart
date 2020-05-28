@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:sqflite/sqlite_api.dart';
+import 'package:fitness_app/models/Exercise.dart';
 
 class DBProvider {
   DBProvider._();
@@ -35,11 +37,42 @@ class DBProvider {
     return database;
   }
 
-  extractdb() async {
+  createTable(String table) async {
     final db = await database;
-    List<Map> row = await db.query('Routine');
-    row.forEach((element) {
-      print(element);
+    await db.transaction((txn) async {
+      await txn.execute('''
+        CREATE TABLE $table (id INTEGER PRIMARY KEY, name TEXT, type TEXT, data TEXT, time TEXT, date TEXT, weight REAL)
+      ''');
     });
+    print('Table: $table has been CREATED');
+  }
+
+  deleteTable(String table) async {
+    final db = await database;
+    await db.transaction((txn) async {
+      await txn.execute('''
+        DROP TABLE IF EXISTS $table
+      ''');
+    });
+    print('Table: $table has been DELETED');
+  }
+
+  insertRow(Exercise exercise, String table) async {
+    final db = await database;
+    await db.rawInsert('''
+      INSERT INTO $table (
+        name, type
+      ) VALUES (?, ?)
+    ''', [exercise.name, exercise.type]);
+  }
+
+  extractdb(String table) async {
+    final db = await database;
+    if (db != null) {
+      List<Map> row = await db.query('$table');
+      row.forEach((element) {
+        print(element);
+      });
+    }
   }
 }
