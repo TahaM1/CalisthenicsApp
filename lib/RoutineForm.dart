@@ -19,9 +19,11 @@ class RoutineFormState extends State<RoutineForm> {
     // DBProvider.db.extractdb("Routine");
     print('Database Created!');
     Exercise ex = new Exercise(name: "pullup", type: "reps");
-    DBProvider.db.createTable("Routine");
-    DBProvider.db.insertRow(ex, "Routine");
-    DBProvider.db.extractdb("Routine");
+    DBProvider.db.createTable("routine");
+    DBProvider.db.doesTableExist("ROUTIN").then((value) => print(value));
+    //DBProvider.db.deleteTable("Routine");
+    //DBProvider.db.insertRow(ex, "Routine");
+    //DBProvider.db.extractdb("Routine");
     super.initState();
   }
 
