@@ -40,7 +40,7 @@ class DBProvider {
     table = table.toLowerCase();
     await db.transaction((txn) async {
       await txn.execute('''
-        CREATE TABLE routine (id INTEGER PRIMARY KEY, name TEXT, date TEXT, type TEXT)
+        CREATE TABLE $table (id INTEGER PRIMARY KEY, name TEXT, setNum INTEGER, reps INTEGER, weight INTEGER, time INTEGER, distance INTEGER)
       ''');
     });
     print('Table: $table has been CREATED');
@@ -58,26 +58,29 @@ class DBProvider {
 
   insertExercise(Exercise exercise, String table) async {
     final db = await database;
-    await db.transaction((txn) async {
-      await txn.rawInsert('''
-      INSERT INTO $table (
-        name, date, type
-      ) VALUES (?, ?)
-    ''', [exercise.name, exercise.date, exercise.type]);
+    if (await doesTableExist(table)) {
+      await db.transaction((txn) async {
+        for (var i = 0; i < exercise.reps.length; i++) {
+          List<dynamic> rowToInsert = [
+            exercise.name,
+            i + 1,
+            exercise.reps[i],
+            exercise.weight[i],
+            exercise.time[i],
+            exercise.distance[i]
+          ];
+          // for (var i = 1; i < rowToInsert.length; i++) {
+          //   if (rowToInsert[i] == null) {
+          //     rowToInsert[i] = null;
+          //   }
+          // }
 
-      for (var i = 0; i < exercise.reps.length; i++) {
-        await txn.rawInsert('''
-        INSERT INTO $table/log (
-          id, reps, time, weight, distance,
-        ) VALUES (last_insert_rowid(), ?, ?, ?, ?)
-      ''', [
-          exercise.reps[i],
-          exercise.time[i],
-          exercise.weight,
-          exercise.distance[i]
-        ]);
-      }
-    });
+          await txn.rawInsert('''
+            INSERT INTO $table (name, setNum, reps, weight, time, distance) VALUES (?, ?, ?, ?, ?, ?)
+          ''', rowToInsert);
+        }
+      });
+    }
   }
 
   extractdb(String table) async {
