@@ -39,8 +39,8 @@ class DBProvider {
     final db = await database;
     table = table.toLowerCase();
     await db.transaction((txn) async {
-      await txn.execute('''
-        CREATE TABLE $table (id INTEGER PRIMARY KEY, name TEXT, setNum INTEGER, reps INTEGER, weight INTEGER, time INTEGER, distance INTEGER)
+      await txn.execute(
+          '''CREATE TABLE $table (id INTEGER PRIMARY KEY, name TEXT, setNum INTEGER, reps INTEGER, weight INTEGER, time INTEGER, distance INTEGER)
       ''');
     });
     print('Table: $table has been CREATED');
@@ -69,11 +69,6 @@ class DBProvider {
             exercise.time[i],
             exercise.distance[i]
           ];
-          // for (var i = 1; i < rowToInsert.length; i++) {
-          //   if (rowToInsert[i] == null) {
-          //     rowToInsert[i] = null;
-          //   }
-          // }
 
           await txn.rawInsert('''
             INSERT INTO $table (name, setNum, reps, weight, time, distance) VALUES (?, ?, ?, ?, ?, ?)
@@ -98,7 +93,7 @@ class DBProvider {
     List<Map<String, dynamic>> tables = await db.query("sqlite_master");
 
     for (final table in tables) {
-      if (table.containsValue(tableToFind.toLowerCase())) {
+      if (table['tbl_name'] == tableToFind.toLowerCase()) {
         return true;
       }
     }
