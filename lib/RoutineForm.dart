@@ -17,10 +17,17 @@ class RoutineFormState extends State<RoutineForm> {
   void initState() {
     DBProvider.db.database;
     // DBProvider.db.extractdb("Routine");
+    DBProvider.db.deleteTable('rr');
+    DBProvider.db.createTable("RR");
     print('Database Created!');
-    Exercise ex = new Exercise(name: "pullup", type: "reps");
-    DBProvider.db.createTable("routine");
-    DBProvider.db.doesTableExist("ROUTIN").then((value) => print(value));
+    Exercise newEx = new Exercise(
+        name: 'Farmer walks',
+        reps: [1, 1, 1],
+        distance: [100, 75, 60],
+        time: [null, null, null],
+        weight: [200, 200, 200]);
+    DBProvider.db.insertExercise(newEx, 'RR');
+
     //DBProvider.db.deleteTable("Routine");
     //DBProvider.db.insertRow(ex, "Routine");
     //DBProvider.db.extractdb("Routine");
